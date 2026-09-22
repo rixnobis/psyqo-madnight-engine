@@ -16,8 +16,12 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
+        # nugget carries a third_party/xmake-psx gitlink with no .gitmodules
+        # entry, which breaks the recursive foreach checkout uses to persist
+        # credentials.
         with:
           submodules: true
+          persist-credentials: false
 
       - name: Library, PCDRV
         run: |
