@@ -16,12 +16,13 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
-        # nugget carries a third_party/xmake-psx gitlink with no .gitmodules
-        # entry, which breaks the recursive foreach checkout uses to persist
-        # credentials.
-        with:
-          submodules: true
-          persist-credentials: false
+
+      - name: Submodules
+        # Not through checkout: nugget carries a third_party/xmake-psx gitlink
+        # with no .gitmodules entry, and checkout recurses into it.
+        run: |
+          git config --global --add safe.directory "$GITHUB_WORKSPACE"
+          git submodule update --init third_party/nugget
 
       - name: Library, PCDRV
         run: |
